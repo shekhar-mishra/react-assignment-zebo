@@ -1,6 +1,6 @@
 import React from 'react';
-
 import zeboLogo from '../Assets/image/zebo.png'
+
 function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg  app-header-bg-color ">

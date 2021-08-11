@@ -1,17 +1,30 @@
-import React from 'react';
+import React,{useCallback, useState,useEffect} from 'react';
 import {useDropzone} from 'react-dropzone';
 
 function FileUploader(props) {
-  const {getRootProps, getInputProps, open, acceptedFiles} = useDropzone({
-    // Disable click and keydown behavior
-    noClick: true,
+  const[fileList,setFilelist]=useState([])
+   const {getRootProps, getInputProps, open, acceptedFiles} = useDropzone({
+   noClick: true,
     noKeyboard: true,
-    maxFiles:5
+    maxFiles:5,
+    onDrop
   });
 
-  const files = acceptedFiles.map((file,index) => (
+  useEffect(()=>{
+    //call function when something change in state
+    props.onFileChange(fileList);
+  },[fileList]) //when file changed
+
+  //  Calling onDrop function
+  function onDrop (acceptedFiles) {
+    console.log("accepted",acceptedFiles)
+    setFilelist(prevState=>[...prevState,{url:window.URL.createObjectURL(...acceptedFiles),file:acceptedFiles}]      
+      )  
+  }
+  
+  const files = fileList.map((file,index) => (
     <div key={index}>
-        {file.path} - {file.size} bytes
+        {file.name}
     </div>
     
   ));
