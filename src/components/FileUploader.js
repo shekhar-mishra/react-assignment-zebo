@@ -1,9 +1,9 @@
-import React,{useCallback, useState,useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import {useDropzone} from 'react-dropzone';
 
 function FileUploader(props) {
   const[fileList,setFilelist]=useState([])
-   const {getRootProps, getInputProps, open, acceptedFiles} = useDropzone({
+   const {getRootProps, getInputProps, open} = useDropzone({
    noClick: true,
     noKeyboard: true,
     maxFiles:5,
@@ -17,16 +17,17 @@ function FileUploader(props) {
 
   //  Calling onDrop function
   function onDrop (acceptedFiles) {
-    console.log("accepted",acceptedFiles)
-    setFilelist(prevState=>[...prevState,{url:window.URL.createObjectURL(...acceptedFiles),file:acceptedFiles}]      
+   setFilelist(prevState=>[...prevState,{url:window.URL.createObjectURL(...acceptedFiles),file:acceptedFiles}]      
       )  
   }
   
   const files = fileList.map((file,index) => (
-    <div key={index}>
-        {file.name}
-    </div>
-    
+    <ul key={index} >
+        <li >
+        {file.file[0].name}
+        </li>
+        </ul>  
+       
   ));
 
   return (
@@ -35,7 +36,7 @@ function FileUploader(props) {
         <input {...getInputProps()} />
         <p>Drag / Drop </p>
         <p>or </p>
-        <button type="button" onClick={open}>
+        <button type="button"  className="m-b-17" onClick={open}>
          Browse
         </button>
       </div>
@@ -43,7 +44,7 @@ function FileUploader(props) {
         {files && files.length>0 && 
         <h4>Uploaded Files</h4>
         }
-       <div>{files}</div>
+       <div className="uploadedFileDiv">{files}</div>
       </aside>
     </div>
   );

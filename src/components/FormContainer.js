@@ -1,28 +1,32 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react'
+import React, { Fragment, useState, useContext } from 'react'
 import FileUploader from './FileUploader'
 import ImageList from './ImageList'
 import { Context } from '../store/index.js'
 
 function FormContainer() {
-    const [state, dispatch] = useContext(Context)
-    const { projectDetails } = state || {}
-    const [projectName, setProjectName] = useState("");
+    const [state,dispatch] = useContext(Context)
+     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [images, setProjectImage] = useState();
 
     const [isrenderImage, setImagerender] = useState(false)
     const saveFormData = (e) => {
         e.preventDefault()
-        let newImage = {
-            projectDetails: projectName,
-            projectDescription: projectDescription,
-            images: images
+        if(projectName!=="" && projectDescription!=="" && images.length>0){
+            let newImage = {
+                projectDetails: projectName,
+                projectDescription: projectDescription,
+                images: images
+            }
+            dispatch({
+                type: "Add-Image",
+                payload: newImage
+            })
+            setImagerender(true)
+        }else{
+            alert("Please Enter All Details and Upload Image ! ")
         }
-        dispatch({
-            type: "Add-Image",
-            payload: newImage
-        })
-        setImagerender(true)
+        
     }
 
     const onFileChange = (files) => {

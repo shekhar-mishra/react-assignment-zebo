@@ -1,7 +1,8 @@
 const initialState ={
-    projectDetails:[
-       
-    ]
+    projectDetails:[       
+    ],
+    clickedImage:{},
+    shouldModalOpen:''
 }
 
 export default function imageReducer (state=initialState,action) {
@@ -13,6 +14,18 @@ export default function imageReducer (state=initialState,action) {
                 projectDetails:[...state.projectDetails, action.payload]
                 
             }
+            case 'Set-Clicked-Image' :
+                return {
+                    ...state,
+                    clickedImage:action.payload,
+                    shouldModalOpen:true
+                }
+                case 'Set-Modal-False' :
+                    return {
+                        ...state,
+                       shouldModalOpen:action.payload
+                    }
+
             default:
                 return state
     }

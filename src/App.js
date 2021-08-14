@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from './components/Navbar'
 import './App.css';
 import FormContainer from './components/FormContainer'
-import ImageList from './components/ImageList'
 import {Store} from './store/index.js'
 
 function App() {
@@ -13,8 +12,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={FormContainer} />
-        {/* <Route exact path="/image-List" component={ImageList} /> */}
-        </Switch>
+         </Switch>
         </Router>
      </Store>
               

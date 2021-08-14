@@ -1,41 +1,21 @@
-import { Fragment, useContext, useEffect, useState, useRef } from 'react';
-import zeboLogo from '../Assets/image/zebo.png'
+import { Fragment, useContext,useState } from 'react';
 import FormContainer from './FormContainer';
 import { Context } from '../store/index.js'
-import { useDetectOutsideClick } from "./useDetectOutsideClick";
-function ImageList(props) {
-    const [state, disptch] = useContext(Context)
-    const { projectDetails } = state || {}
-    console.log("===============", projectDetails)
+import ImageModal from './ImageModal';
+function ImageList() {
+    const [state, dispatch] = useContext(Context)
+    const { projectDetails ,shouldModalOpen} = state || {}
     const [showImageForm, setShowImageForm] = useState(false)
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
-    const [selectedIndex, setSelectedIndex] = useState(null)
-    const onClick = () => setIsActive(!isActive);
-
-    const _mouseEnter = (e) => {
-        e.preventDefault();
-
-    }
-    const _mouseLeave = (e) => {
-
-    }
-    const _clickHandler = (e) => {
-        console.log("eee", e)
-    }
-    let tileStyle = {
-        width: '18vw',
-        height: '18vw'
-    };
     const goToAddImage = () => {
         setShowImageForm(true)
     }
-    const onRightClick = (e, index) => {
-        e.preventDefault()
-        console.log("hello", e, index)
-        setSelectedIndex(index)
-        setIsActive(!isActive);
-    }
+   
+    const openModal =(image)=>{
+        dispatch({
+            type: "Set-Clicked-Image",
+            payload: image
+        })
+     }
     return (
         <Fragment>
             {showImageForm ? <FormContainer /> : <div>
@@ -44,47 +24,25 @@ function ImageList(props) {
                         <button type="submit" className="btn btn-primary bg-black" onClick={goToAddImage}>Add Image</button>
                     </div>
                 </div>
-                <div className="container">
-                    <div className="row d-flex flex-row py-5">
+                <div className="container m-t-30">
+                    <div className="row">
 
                         {projectDetails && projectDetails.map((project, index) => {
                             return (
-                                <div>
+                                <div className= "row" key={index}>
                                     {project && project.images.map((image, index1) => {
                                         return (
-                                            <div className="col-md-6 col-sm-12 tile" key={index1}>
+                                            <div className="column" key={index1}>
                                                 <img
-                                                    onMouseEnter={_mouseEnter}
-                                                    onMouseLeave={_mouseLeave}
-                                                    onClick={_clickHandler}
-                                                    src={image.url}
+                                            
+                                                   src={image.url}
                                                     alt={"hh"}
-                                                    style={tileStyle}
-                                                    onContextMenu={(e) => onRightClick(e, index1)}
+                                                    className='image-size'
+                                                    onClick={()=>openModal(image)}
+                                                    
                                                 />
-                                                <nav
-                                                    ref={dropdownRef}
-                                                    className={`menu ${isActive && (selectedIndex === index1) ? "active" : "inactive"}`}
-                                                >
-                                                    {projectDetails && projectDetails.map((project, projectsIndex) => {
-                                                        return (
-                                                            <ul>
-                                                                  {project && project.images.map((image, imageIndex) => {
-                                                                      return (
-                                                                        <li>
-                                                                        <a href="#">{image.file[0].name}</a>
-                                                                    </li>
-                                                                      )
-                                                                  })}
-                                                               
-                                                              
-                                                            </ul>
-                                                        )
-                                                    })}
-
-                                                </nav>
+                                               
                                             </div>
-
                                         )
                                     })
 
@@ -101,6 +59,9 @@ function ImageList(props) {
 
             </div>
             }
+           {shouldModalOpen &&
+            <ImageModal  />
+           }
 
         </Fragment>
     )
